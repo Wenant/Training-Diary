@@ -77,4 +77,5 @@ public class Workout {
     public String toStringShort() {
         return "Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + type;
     }
+
 }

@@ -141,7 +141,6 @@ public class ConsoleApp {
     }
 
     private static void showUserMenu(User authenticatedUser) {
-
         var username = authenticatedUser.getUsername();
 
         while (true) {
@@ -156,7 +155,6 @@ public class ConsoleApp {
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
-
 
             switch (choice) {
                 case 1:
@@ -206,13 +204,11 @@ public class ConsoleApp {
         } else {
             System.out.println("Have no previous workouts");
         }
-
     }
 
     private static void addNewWorkout(String username) {
 
         Date date = setDate();
-
         String type = setWorkoutType();
 
         System.out.println("Enter workout duration (in minutes):");
@@ -261,7 +257,6 @@ public class ConsoleApp {
         }
 
         int choice = scanner.nextInt();
-
         if (choice >= 1 && choice <= types.size()) {
             return types.get(choice - 1);
         } else {
@@ -340,15 +335,15 @@ public class ConsoleApp {
         var indexForDelete = choiceWorkout(username);
         workoutService.deleteWorkoutByIndex(username, indexForDelete);
         audit.add(new Audit(username, "Delete workout"));
-
     }
 
     private static WorkoutDTO editWorkoutDTO(WorkoutDTO workout) {
-        System.out.println("Editing workout fields:");
 
+        System.out.println("Editing workout fields:");
         System.out.println("Current type: " + workout.getType());
         System.out.println("1. Change");
         System.out.println("2. Next");
+
         int choiceType = scanner.nextInt();
         scanner.nextLine();
         if (choiceType == 1) {
@@ -404,9 +399,7 @@ public class ConsoleApp {
                 additionalParams.put(newKey, newValue);
             }
         }
-
         return workout;
-
     }
 
     private static void initializeData() {
@@ -414,7 +407,6 @@ public class ConsoleApp {
         User user = new User("q", "q", UserRoles.USER);
         userRepository.registerUser(admin);
         userRepository.registerUser(user);
-
         workoutRepository.addNewWorkoutType("running");
         workoutRepository.addNewWorkoutType("cycling");
         workoutRepository.addNewWorkoutType("swimming");
