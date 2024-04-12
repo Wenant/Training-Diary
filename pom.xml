@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.projectlombok.version>1.18.32</org.projectlombok.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <junit.version>4.13.2</junit.version>
+        <org.junit.jupiter.version>5.8.1</org.junit.jupiter.version>
         <org.mockito.version>5.11.0</org.mockito.version>
         <org.assertj.version>3.25.3</org.assertj.version>
     </properties>
@@ -39,12 +39,7 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -60,7 +55,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
+            <version>${org.junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
