@@ -29,6 +29,8 @@ public class ConsoleApp {
     private static final List<Audit> audit = new ArrayList<>();
 
     public static void main(String[] args) {
+        initializeData();
+
         while (true) {
             showMainMenu();
             int choice = scanner.nextInt();
@@ -405,6 +407,18 @@ public class ConsoleApp {
 
         return workout;
 
+    }
+
+    private static void initializeData() {
+        User admin = new User("admin", "admin", UserRoles.ADMIN);
+        User user = new User("q", "q", UserRoles.USER);
+        userRepository.registerUser(admin);
+        userRepository.registerUser(user);
+
+        workoutRepository.addNewWorkoutType("running");
+        workoutRepository.addNewWorkoutType("cycling");
+        workoutRepository.addNewWorkoutType("swimming");
+        workoutRepository.addNewWorkoutType("weightlifting");
     }
 
 }

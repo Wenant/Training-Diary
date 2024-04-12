@@ -56,8 +56,8 @@ class UserRepositoryImplTest {
         userRepository.registerUser(user2);
         List<User> allUsers = userRepository.getAllUsers();
 
-        // allUsers size should be 4 because 2 users initialized in the constructor and 2 here in the test
-        assertEquals(4, allUsers.size());
+
+        assertEquals(2, allUsers.size());
         assertTrue(allUsers.contains(user1));
         assertTrue(allUsers.contains(user2));
     }

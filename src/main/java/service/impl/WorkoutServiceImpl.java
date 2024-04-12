@@ -64,7 +64,7 @@ public class WorkoutServiceImpl implements WorkoutService {
      */
     @Override
     public void addNewWorkoutTyp(String type) {
-        workoutRepository.addNewWorkoutTyp(type);
+        workoutRepository.addNewWorkoutType(type);
     }
 
     /**

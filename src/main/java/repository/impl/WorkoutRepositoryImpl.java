@@ -1,5 +1,6 @@
 package repository.impl;
 
+import lombok.NoArgsConstructor;
 import model.Workout;
 import repository.WorkoutRepository;
 
@@ -8,27 +9,10 @@ import java.util.*;
 /**
  * Implementation of WorkoutRepository.
  */
+@NoArgsConstructor
 public class WorkoutRepositoryImpl implements WorkoutRepository {
     private final Map<String, List<Workout>> userWorkouts = new HashMap<>();
-    private final List<String> workoutTypes;
-
-    /**
-     * Constructs a new WorkoutRepositoryImpl and initializes it with default workout types.
-     */
-    public WorkoutRepositoryImpl() {
-        workoutTypes = new ArrayList<>();
-        initializeWorkoutTypes();
-    }
-
-    /**
-     * Initializes the repository with default workout types.
-     */
-    private void initializeWorkoutTypes() {
-        workoutTypes.add("running");
-        workoutTypes.add("cycling");
-        workoutTypes.add("swimming");
-        workoutTypes.add("weightlifting");
-    }
+    private final List<String> workoutTypes = new ArrayList<>();
 
     /**
      * {@inheritDoc}
@@ -67,7 +51,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
      * {@inheritDoc}
      */
     @Override
-    public void addNewWorkoutTyp(String type) {
+    public void addNewWorkoutType(String type) {
         workoutTypes.add(type);
     }
 

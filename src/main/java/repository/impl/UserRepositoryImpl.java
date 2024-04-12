@@ -1,35 +1,19 @@
 package repository.impl;
 
 
+import lombok.NoArgsConstructor;
 import model.User;
 import repository.UserRepository;
-import util.UserRoles;
 
 import java.util.*;
 
 /**
  * Implementation of WorkoutRepository.
  */
+@NoArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    private Map<String, User> users = new HashMap<>();
+    private final Map<String, User> users = new HashMap<>();
 
-    /**
-     * Constructs a new UserRepositoryImpl and initializes it with default users.
-     */
-    public UserRepositoryImpl() {
-        users = new HashMap<>();
-        initializeUsers();
-    }
-
-    /**
-     * Initializes the repository with default users.
-     */
-    private void initializeUsers() {
-        User admin = new User("admin", "admin", UserRoles.ADMIN);
-        User user = new User("q", "q", UserRoles.USER);
-        users.put(admin.getUsername(), admin);
-        users.put(user.getUsername(), user);
-    }
 
     /**
      * {@inheritDoc}

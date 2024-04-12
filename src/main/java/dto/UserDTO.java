@@ -11,7 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
-
     /**
      * The username of the user.
      */
