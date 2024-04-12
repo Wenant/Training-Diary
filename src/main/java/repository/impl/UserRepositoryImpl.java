@@ -1,7 +1,9 @@
 package repository.impl;
 
 
+import dto.UserDTO;
 import lombok.NoArgsConstructor;
+import mapper.UserMapper;
 import model.User;
 import repository.UserRepository;
 
@@ -49,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
      * {@inheritDoc}
      */
     @Override
-    public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+    public List<UserDTO> getAllUsers() {
+        return UserMapper.INSTANCE.userListToUserDtoList(new ArrayList<>(users.values()));
     }
 }

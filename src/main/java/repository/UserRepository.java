@@ -1,5 +1,6 @@
 package repository;
 
+import dto.UserDTO;
 import model.User;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public interface UserRepository {
     /**
      * Retrieves a list of all users in the repository.
      *
-     * @return A list of all users.
+     * @return A dto list of all users.
      */
-    List<User> getAllUsers();
+    List<UserDTO> getAllUsers();
 }

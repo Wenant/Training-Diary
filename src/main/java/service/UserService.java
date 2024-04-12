@@ -30,7 +30,7 @@ public interface UserService {
     /**
      * Retrieves a list of all users.
      *
-     * @return A list of all users.
+     * @return A dto list of all users.
      */
     List<UserDTO> getAllUsers();
 }
