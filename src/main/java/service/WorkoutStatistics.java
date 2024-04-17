@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface WorkoutStatistics {
 
+
     /**
      * Calculates the total calories burned from a list of workouts.
      *
