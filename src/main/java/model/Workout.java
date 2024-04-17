@@ -17,6 +17,16 @@ import java.util.Map;
 public class Workout {
 
     /**
+     * The id of the workout.
+     */
+    private Long id;
+
+    /**
+     * The id of the user who completed the workout.
+     */
+    private Long userId;
+
+    /**
      * The username of the user who completed the workout.
      */
     private String username;

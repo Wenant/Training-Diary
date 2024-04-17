@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 public class Audit {
 
     /**
+     * The id of the audit log.
+     */
+    private Long id;
+
+    /**
      * The timestamp of the audit log.
      */
     private LocalDateTime timestamp;

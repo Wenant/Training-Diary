@@ -13,22 +13,49 @@ import service.WorkoutStatistics;
 import service.impl.UserServiceImpl;
 import service.impl.WorkoutServiceImpl;
 import service.impl.WorkoutStatisticsImpl;
+import util.ConnectionManager;
 import util.UserRoles;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsoleApp {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UserRepository userRepository = new UserRepositoryImpl();
+    private static ConnectionManager connection;
+    private static final UserRepository userRepository = new UserRepositoryImpl(connection);
     private static final UserService userService = new UserServiceImpl(userRepository);
     private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl();
     private static final WorkoutService workoutService = new WorkoutServiceImpl(workoutRepository);
     private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl();
     private static final List<Audit> audit = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        ConnectionManager connectionManager = new ConnectionManager();
+        Connection connection = connectionManager.getConnection();
+        if (connection != null) {
+                System.out.println("Connection successful!");
+
+            }
+
+//        try {
+//            Connection connection = connectionManager.getConnection();
+//            if (connection != null) {
+//                System.out.println("Connection successful!");
+//                //
+//            } else {
+//                System.out.println("Failed to establish connection.");
+//            }
+//        } catch (SQLException e) {
+//            System.err.println("Connection error: " + e.getMessage());
+//        }
+
+
+
+
+
         initializeData();
 
         while (true) {
@@ -403,14 +430,14 @@ public class ConsoleApp {
     }
 
     private static void initializeData() {
-        User admin = new User("admin", "admin", UserRoles.ADMIN);
-        User user = new User("q", "q", UserRoles.USER);
-        userRepository.registerUser(admin);
-        userRepository.registerUser(user);
-        workoutRepository.addNewWorkoutType("running");
-        workoutRepository.addNewWorkoutType("cycling");
-        workoutRepository.addNewWorkoutType("swimming");
-        workoutRepository.addNewWorkoutType("weightlifting");
+//        User admin = new User("admin", "admin", UserRoles.ADMIN);
+//        User user = new User("q", "q", UserRoles.USER);
+//        userRepository.registerUser(admin);
+//        userRepository.registerUser(user);
+//        workoutRepository.addNewWorkoutType("running");
+//        workoutRepository.addNewWorkoutType("cycling");
+//        workoutRepository.addNewWorkoutType("swimming");
+//        workoutRepository.addNewWorkoutType("weightlifting");
     }
 
 }

@@ -3,18 +3,20 @@ package repository.impl;
 
 import dto.UserDTO;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import mapper.UserMapper;
 import model.User;
 import repository.UserRepository;
+import util.ConnectionManager;
 
 import java.util.*;
 
 /**
  * Implementation of WorkoutRepository.
  */
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    private final Map<String, User> users = new HashMap<>();
+    private final ConnectionManager connectionManager;
 
 
     /**
@@ -22,7 +24,8 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public void registerUser(User user) {
-        users.put(user.getUsername(), user);
+
+
     }
 
     /**
@@ -30,7 +33,8 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public boolean isUsernameExists(String username) {
-        return users.containsKey(username);
+
+        return false;
     }
 
     /**
@@ -38,12 +42,8 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public Optional<User> authenticateUser(String username, String password) {
-        if (users.containsKey(username)) {
-            User user = users.get(username);
-            if (user.getPassword().equals(password)) {
-                return Optional.of(user);
-            }
-        }
+
+
         return Optional.empty();
     }
 
@@ -52,6 +52,8 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public List<UserDTO> getAllUsers() {
-        return UserMapper.INSTANCE.userListToUserDtoList(new ArrayList<>(users.values()));
+
+
+        return null;
     }
 }
