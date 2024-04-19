@@ -6,6 +6,7 @@ import in.UserInputReader;
 import lombok.AllArgsConstructor;
 import model.Audit;
 import model.User;
+import repository.AuditRepository;
 import service.WorkoutService;
 import service.WorkoutStatistics;
 
@@ -20,8 +21,11 @@ public class UserMenu {
     private final WorkoutService workoutService;
     private final List<Audit> audit;
     private final UserInputReader reader;
+    private final AuditRepository auditRepository;
+
 
     public void showMenu(User authenticatedUser) {
+        var userId = authenticatedUser.getId();
         while (true) {
             System.out.println("\nUser Menu:");
             System.out.println("1. View previous workouts");
@@ -36,23 +40,22 @@ public class UserMenu {
 
             switch (choice) {
                 case 1:
-                    viewPreviousWorkouts(authenticatedUser.getId());
+                    viewPreviousWorkouts(userId);
                     break;
                 case 2:
                     addNewWorkout(authenticatedUser);
                     break;
                 case 3:
-                    editWorkout(authenticatedUser.getId());
+                    editWorkout(userId);
                     break;
                 case 4:
-                    deleteWorkout(authenticatedUser.getId());
+                    deleteWorkout(userId);
                     break;
                 case 5:
-                    viewStatistics(authenticatedUser.getId());
+                    viewStatistics(userId);
                     break;
                 case 6:
-                    var usernameForAudit = authenticatedUser.getUsername();
-                    audit.add(new Audit(usernameForAudit, "Logout"));
+                    auditRepository.addAudit(new Audit(userId, "Logout"));
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -72,6 +75,7 @@ public class UserMenu {
         } else {
             System.out.println("Have no previous workouts");
         }
+        auditRepository.addAudit(new Audit(userId, "View previous workouts"));
     }
 
     private void addNewWorkout(User user) {
@@ -121,7 +125,7 @@ public class UserMenu {
                 .additionalParams(additionalParams)
                 .build();
         workoutService.addWorkout(workout);
-        audit.add(new Audit(user.getUsername(), "Add new workout"));
+        auditRepository.addAudit(new Audit(userId, "Add new workout"));
     }
 
 
@@ -164,16 +168,14 @@ public class UserMenu {
         var workoutDTO = selectWorkout(userId);
         var editedWorkoutDTO = editWorkoutDTO(workoutDTO);
         workoutService.editWorkout(editedWorkoutDTO);
-        //audit.add(new Audit(username, "Edit workout"));
-
+        auditRepository.addAudit(new Audit(userId, "Edit workout"));
     }
 
     private void deleteWorkout(Long userId) {
         var workout = selectWorkout(userId);
         var workoutId = workout.getId();
         workoutService.deleteWorkout(workoutId);
-
-        //audit.add(new Audit(username, "Delete workout"));
+        auditRepository.addAudit(new Audit(userId, "Delete workout"));
     }
 
     private WorkoutDTO editWorkoutDTO(WorkoutDTO workout) {
@@ -238,6 +240,9 @@ public class UserMenu {
             }
         }
         workout.setAdditionalParams(newAdditionalParams);
+
+        var userId = workout.getUserId();
+        auditRepository.addAudit(new Audit(userId, "Edit workout"));
 
         return workout;
     }

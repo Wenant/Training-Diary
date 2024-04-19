@@ -23,9 +23,9 @@ public class Audit {
     private LocalDateTime timestamp;
 
     /**
-     * The username of the user performing the action.
+     * The userId of the user performing the action.
      */
-    private String username;
+    private Long userId;
 
     /**
      * The action performed by the user.
@@ -35,12 +35,12 @@ public class Audit {
     /**
      * Constructs an Audit object with the current timestamp.
      *
-     * @param username The username of the user performing the action.
+     * @param userId   The username of the user performing the action.
      * @param action   The action performed by the user.
      */
-    public Audit(String username, String action) {
+    public Audit(Long userId, String action) {
         this.timestamp = LocalDateTime.now();
-        this.username = username;
+        this.userId = userId;
         this.action = action;
     }
 
@@ -53,7 +53,7 @@ public class Audit {
     public String toString() {
         return "AuditLog{" +
                 "Time: " + timestamp +
-                ", Username: '" + username + '\'' +
+                ", User ID: '" + userId + '\'' +
                 ", Action: '" + action + '\'' +
                 '}' + "\n";
     }

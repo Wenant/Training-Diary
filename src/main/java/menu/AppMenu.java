@@ -4,8 +4,10 @@ import dto.UserDTO;
 import in.UserInputReader;
 import model.Audit;
 import model.User;
+import repository.AuditRepository;
 import repository.UserRepository;
 import repository.WorkoutRepository;
+import repository.impl.AuditRepositoryImpl;
 import repository.impl.UserRepositoryImpl;
 import repository.impl.WorkoutRepositoryImpl;
 import service.UserService;
@@ -27,14 +29,14 @@ public class AppMenu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final ConnectionManager connection = new ConnectionManager();
     private static final UserRepository userRepository = new UserRepositoryImpl(connection);
+    private static final AuditRepository auditRepository = new AuditRepositoryImpl(connection);
     private static final UserService userService = new UserServiceImpl(userRepository);
     private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl(connection);
     private static final WorkoutService workoutService = new WorkoutServiceImpl(workoutRepository);
     private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl();
     static UserInputReader reader = new UserInputReader(scanner);
     static AdminMenu adminMenu = new AdminMenu(userService, workoutService, audit, reader);
-    static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader);
-
+    static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader, auditRepository);
 
     public static void run() {
         while (true) {
@@ -48,9 +50,7 @@ public class AppMenu {
                     register();
                     break;
                 case 3:
-                    //System.out.println(audit);
                     System.out.println("Exiting program...");
-
                     System.exit(0);
                     break;
                 default:
@@ -77,16 +77,13 @@ public class AppMenu {
         Optional<User> authenticatedUserOptional = userService.authenticateUser(loginUsername, loginPassword);
         if (authenticatedUserOptional.isPresent()) {
             User authenticatedUser = authenticatedUserOptional.get();
-            var username = authenticatedUser.getUsername();
-            audit.add(new Audit(username, "Login"));
+            var userId = authenticatedUser.getId();
+            auditRepository.addAudit(new Audit(userId, "Login"));
             System.out.println("Login successful");
             if (authenticatedUser.getRole() == UserRoles.ADMIN) {
-                // меню для администратора
                 adminMenu.showMenu(authenticatedUser);
 
-
             } else if (authenticatedUser.getRole() == UserRoles.USER) {
-                // меню для пользователя
                 userMenu.showMenu(authenticatedUser);
             }
         } else {

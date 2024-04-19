@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class UserInputReader {
     private final Scanner scanner;
 
-
     public String readString() {
         String input;
         while (true) {

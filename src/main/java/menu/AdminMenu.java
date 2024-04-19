@@ -37,6 +37,7 @@ public class AdminMenu {
                     break;
                 case 3:
                     logout(authenticatedUser);
+
                     return;
                 default:
                     System.out.println("Invalid choice");
@@ -72,8 +73,8 @@ public class AdminMenu {
     }
 
     private void logout(User authenticatedUser) {
-        String usernameForAudit = authenticatedUser.getUsername();
-        audit.add(new Audit(usernameForAudit, "Logout"));
+        var userId = authenticatedUser.getId();
+        audit.add(new Audit(userId, "Logout"));
         System.out.println("Exiting...");
     }
 }
