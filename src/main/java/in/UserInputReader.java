@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class UserInputReader {
     private final Scanner scanner;
 
+
     public String readString() {
         String input;
         while (true) {
@@ -56,7 +57,7 @@ public class UserInputReader {
                 if (isValidInt(num)) {
                     break;
                 } else {
-                    System.out.println("Input out of range for int type. Please enter a valid integer.");
+                    System.out.println("Please enter a valid integer.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid format. Please enter an integer.");
@@ -67,6 +68,6 @@ public class UserInputReader {
     }
 
     private boolean isValidInt(long num) {
-        return num >= Integer.MIN_VALUE && num <= Integer.MAX_VALUE;
+        return num >= 0 && num <= Integer.MAX_VALUE;
     }
 }

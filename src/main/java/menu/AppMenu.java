@@ -29,8 +29,8 @@ public class AppMenu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final ConnectionManager connection = new ConnectionManager();
     private static final UserRepository userRepository = new UserRepositoryImpl(connection);
-    private static final AuditRepository auditRepository = new AuditRepositoryImpl(connection);
     private static final UserService userService = new UserServiceImpl(userRepository);
+    private static final AuditRepository auditRepository = new AuditRepositoryImpl(connection);
     private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl(connection);
     private static final WorkoutService workoutService = new WorkoutServiceImpl(workoutRepository);
     private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl();

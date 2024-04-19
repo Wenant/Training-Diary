@@ -18,16 +18,16 @@ public class AuditRepositoryImpl implements AuditRepository {
     @Override
     public void addAudit(Audit audit) {
         String sql = "INSERT INTO ylab_hw.audit (user_id, action, timestamp) VALUES (?, ?, ?)";
-            try (Connection connection = connectionManager.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setLong(1, audit.getUserId());
-                preparedStatement.setString(2, audit.getAction());
-                preparedStatement.setTimestamp(3, Timestamp.valueOf(audit.getTimestamp()));
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("Error while saving audit: " + e.getMessage());
-                e.printStackTrace();
-            }
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, audit.getUserId());
+            preparedStatement.setString(2, audit.getAction());
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(audit.getTimestamp()));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error while saving audit: " + e.getMessage());
+            e.printStackTrace();
         }
+    }
 
 }

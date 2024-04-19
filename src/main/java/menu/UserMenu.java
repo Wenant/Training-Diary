@@ -63,7 +63,6 @@ public class UserMenu {
             }
         }
 
-
     }
 
     private void viewPreviousWorkouts(Long userId) {

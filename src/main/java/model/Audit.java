@@ -35,8 +35,8 @@ public class Audit {
     /**
      * Constructs an Audit object with the current timestamp.
      *
-     * @param userId   The username of the user performing the action.
-     * @param action   The action performed by the user.
+     * @param userId The username of the user performing the action.
+     * @param action The action performed by the user.
      */
     public Audit(Long userId, String action) {
         this.timestamp = LocalDateTime.now();
