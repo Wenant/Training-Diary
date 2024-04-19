@@ -1,6 +1,5 @@
 package service;
 
-import dto.UserDTO;
 import dto.WorkoutDTO;
 import dto.WorkoutTypeDTO;
 
@@ -43,8 +42,8 @@ public interface WorkoutService {
     /**
      * Retrieves a specific user's workout by index.
      *
-     * @param userId     The username of the user.
-     * @param workoutId  The index of the workout.
+     * @param userId    The username of the user.
+     * @param workoutId The index of the workout.
      * @return The workout at the specified index for the specified user.
      */
     WorkoutDTO getUserWorkoutByWorkoutId(Long userId, Long workoutId);

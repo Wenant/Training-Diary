@@ -1,7 +1,5 @@
 package repository.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import model.Workout;
 import model.WorkoutType;
@@ -9,12 +7,11 @@ import repository.WorkoutRepository;
 import util.ConnectionManager;
 import util.MapToJsonConverter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Date;
-import java.util.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of WorkoutRepository.

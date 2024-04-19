@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MapToJsonConverter {
@@ -21,7 +20,8 @@ public class MapToJsonConverter {
 
     public static Map<String, Object> jsonToMap(String json) {
         try {
-            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
+            });
         } catch (IOException e) {
             throw new RuntimeException("Failed to convert JSON to map", e);
         }

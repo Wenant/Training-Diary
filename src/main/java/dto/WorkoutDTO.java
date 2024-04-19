@@ -54,7 +54,7 @@ public class WorkoutDTO {
 
 
     public String toStringShort() {
-        return "Workout ID: " + id +  ", Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + type;
+        return "Workout ID: " + id + ", Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + type;
     }
 
     @Override

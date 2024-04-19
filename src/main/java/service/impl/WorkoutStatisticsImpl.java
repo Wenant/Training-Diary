@@ -1,7 +1,6 @@
 package service.impl;
 
 import dto.WorkoutDTO;
-import model.Workout;
 import service.WorkoutStatistics;
 
 import java.util.List;

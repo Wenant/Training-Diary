@@ -42,8 +42,8 @@ public interface WorkoutRepository {
     /**
      * Retrieves a specific workout for a user by index.
      *
-     * @param userId     The username of the user.
-     * @param workoutId  The index of the workout.
+     * @param userId    The username of the user.
+     * @param workoutId The index of the workout.
      * @return The workout at the specified index for the specified user.
      */
     Workout getUserWorkoutByWorkoutId(Long userId, Long workoutId);
