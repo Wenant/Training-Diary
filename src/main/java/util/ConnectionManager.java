@@ -14,6 +14,10 @@ public class ConnectionManager {
 
     public ConnectionManager() {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.err.println("File application.properties not found");
+                System.exit(1);
+            }
             Properties properties = new Properties();
             properties.load(input);
             this.url = properties.getProperty("db.url");

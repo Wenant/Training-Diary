@@ -11,10 +11,7 @@ import java.util.List;
 public class WorkoutStatisticsImpl implements WorkoutStatistics {
 
     /**
-     * Calculates the total calories burned from a list of workouts.
-     *
-     * @param workouts The list of workouts for calculate the total calories burned.
-     * @return The total calories burned.
+     * {@inheritDoc}
      */
     @Override
     public int calculateTotalCaloriesBurned(List<Workout> workouts) {

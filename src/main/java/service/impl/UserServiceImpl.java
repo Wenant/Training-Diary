@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import mapper.UserMapper;
 import model.User;
 import repository.UserRepository;
@@ -12,22 +13,13 @@ import java.util.Optional;
 /**
  * Implementation of UserService.
  */
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
 
     /**
-     * Constructs a new UserServiceImpl.
-     *
-     * @param userRepository The UserRepository.
-     */
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    /**
-     * Registers a new user.
-     *
-     * @param userDTO The DTO representing the new user to register.
+     * {@inheritDoc}
      */
     @Override
     public void registerUser(UserDTO userDTO) {
@@ -44,24 +36,29 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Authenticates a user based on the provided username and password.
-     *
-     * @param username The username of the user to authenticate.
-     * @param password The password of the user to authenticate.
-     * @return An Optional containing the authenticated user if successful, otherwise empty.
+     * {@inheritDoc}
      */
     @Override
     public Optional<User> authenticateUser(String username, String password) {
-        return userRepository.authenticateUser(username, password);
+        Optional<User> user = userRepository.getUserByUsername(username);
+        if (user.isEmpty()) {
+            System.out.println("User not found");
+            return Optional.empty();
+        }
+        if (!user.get().getPassword().equals(password)) {
+            System.out.println("Wrong password");
+            return Optional.empty();
+        }
+        System.out.println("User authenticated successfully");
+        return user;
     }
 
     /**
-     * Retrieves a list of all users.
-     *
-     * @return A list of all users.
+     * {@inheritDoc}
      */
     @Override
     public List<UserDTO> getAllUsers() {
-        return userRepository.getAllUsers();
+        List<User> users = userRepository.getAllUsers();
+        return UserMapper.INSTANCE.userListToUserDtoList(users);
     }
 }

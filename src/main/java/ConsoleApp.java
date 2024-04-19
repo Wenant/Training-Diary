@@ -16,7 +16,6 @@ import service.impl.WorkoutStatisticsImpl;
 import util.ConnectionManager;
 import util.UserRoles;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ import java.util.*;
 
 public class ConsoleApp {
     private static final Scanner scanner = new Scanner(System.in);
-    private static ConnectionManager connection;
+    private static final ConnectionManager connection = new ConnectionManager();
     private static final UserRepository userRepository = new UserRepositoryImpl(connection);
     private static final UserService userService = new UserServiceImpl(userRepository);
     private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl();
@@ -33,12 +32,12 @@ public class ConsoleApp {
     private static final List<Audit> audit = new ArrayList<>();
 
     public static void main(String[] args) throws SQLException {
-        ConnectionManager connectionManager = new ConnectionManager();
-        Connection connection = connectionManager.getConnection();
+//        ConnectionManager connectionManager = new ConnectionManager();
+//        Connection connection = connectionManager.getConnection();
         if (connection != null) {
-                System.out.println("Connection successful!");
+            System.out.println("Connection successful!");
 
-            }
+        }
 
 //        try {
 //            Connection connection = connectionManager.getConnection();
@@ -51,9 +50,6 @@ public class ConsoleApp {
 //        } catch (SQLException e) {
 //            System.err.println("Connection error: " + e.getMessage());
 //        }
-
-
-
 
 
         initializeData();
@@ -110,7 +106,7 @@ public class ConsoleApp {
                 showUserMenu(authenticatedUser);
             }
         } else {
-            System.out.println("Invalid username or password");
+            System.out.println("Login failed");
         }
     }
 

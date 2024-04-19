@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.WorkoutDTO;
+import lombok.RequiredArgsConstructor;
 import mapper.WorkoutMapper;
 import model.Workout;
 import repository.WorkoutRepository;
@@ -11,23 +12,13 @@ import java.util.List;
 /**
  * Implementation of WorkoutService.
  */
+@RequiredArgsConstructor
 public class WorkoutServiceImpl implements WorkoutService {
+
     private final WorkoutRepository workoutRepository;
 
     /**
-     * Constructs a new WorkoutServiceImpl.
-     *
-     * @param workoutRepository The WorkoutRepository.
-     */
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository) {
-        this.workoutRepository = workoutRepository;
-    }
-
-
-    /**
-     * Adds a new workout.
-     *
-     * @param workoutDTO The DTO representing the new workout to add.
+     * {@inheritDoc}
      */
     @Override
     public void addWorkout(WorkoutDTO workoutDTO) {
@@ -37,10 +28,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Retrieves all workouts for a specific user.
-     *
-     * @param username The username of the user.
-     * @return A list of workouts for the specified user.
+     * {@inheritDoc}
      */
     @Override
     public List<Workout> getAllUserWorkouts(String username) {
@@ -48,9 +36,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Retrieves all distinct workout types.
-     *
-     * @return A list of all distinct workout types.
+     * {@inheritDoc}
      */
     @Override
     public List<String> getAllWorkoutTypes() {
@@ -58,9 +44,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Adds a new workout type.
-     *
-     * @param type The new workout type to add.
+     * {@inheritDoc}
      */
     @Override
     public void addNewWorkoutTyp(String type) {
@@ -68,11 +52,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Retrieves a specific user's workout by index.
-     *
-     * @param username     The username of the user.
-     * @param elementIndex The index of the workout.
-     * @return The workout at the specified index for the specified user.
+     * {@inheritDoc}
      */
     @Override
     public WorkoutDTO getUserWorkoutByIndex(String username, int elementIndex) {
@@ -81,10 +61,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Updates an existing workout.
-     *
-     * @param editedWorkoutDTO The DTO representing the edited workout.
-     * @param elementIndex     The index of the workout to update.
+     * {@inheritDoc}
      */
     @Override
     public void editWorkout(WorkoutDTO editedWorkoutDTO, int elementIndex) {
@@ -94,10 +71,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     /**
-     * Deletes a workout.
-     *
-     * @param username       The username of the user.
-     * @param indexForDelete The index of the workout to delete.
+     * {@inheritDoc}
      */
     @Override
     public void deleteWorkoutByIndex(String username, int indexForDelete) {
