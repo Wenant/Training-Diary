@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Map;
 
 /**
@@ -26,10 +26,6 @@ public class Workout {
      */
     private Long userId;
 
-    /**
-     * The username of the user who completed the workout.
-     */
-    private String username;
 
     /**
      * The date when the workout was completed.
@@ -65,7 +61,6 @@ public class Workout {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nWorkout Details:");
-        sb.append("\nUsername: ").append(username);
         sb.append("\nDate: ").append(new SimpleDateFormat("yyyy-MM-dd").format(date));
         sb.append("\nType: ").append(type);
         sb.append("\nDuration: ").append(duration).append(" minutes");

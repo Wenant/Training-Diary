@@ -1,5 +1,6 @@
 package service;
 
+import dto.WorkoutDTO;
 import model.Workout;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface WorkoutStatistics {
      * @param workouts The list of workouts for which to calculate the total calories burned.
      * @return The total calories burned.
      */
-    int calculateTotalCaloriesBurned(List<Workout> workouts);
+    int calculateTotalCaloriesBurned(List<WorkoutDTO> workouts);
 }

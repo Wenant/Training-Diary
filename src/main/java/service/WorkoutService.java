@@ -1,7 +1,8 @@
 package service;
 
+import dto.UserDTO;
 import dto.WorkoutDTO;
-import model.Workout;
+import dto.WorkoutTypeDTO;
 
 import java.util.List;
 
@@ -20,17 +21,17 @@ public interface WorkoutService {
     /**
      * Retrieves all workouts for a specific user.
      *
-     * @param username The username of the user.
+     * @param userId The username of the user.
      * @return A list of workouts for the specified user.
      */
-    List<Workout> getAllUserWorkouts(String username);
+    List<WorkoutDTO> getAllUserWorkouts(Long userId);
 
     /**
      * Retrieves all distinct workout types.
      *
      * @return A list of all distinct workout types.
      */
-    List<String> getAllWorkoutTypes();
+    List<WorkoutTypeDTO> getAllWorkoutTypes();
 
     /**
      * Adds a new workout type.
@@ -42,25 +43,23 @@ public interface WorkoutService {
     /**
      * Retrieves a specific user's workout by index.
      *
-     * @param username     The username of the user.
-     * @param elementIndex The index of the workout.
+     * @param userId     The username of the user.
+     * @param workoutId  The index of the workout.
      * @return The workout at the specified index for the specified user.
      */
-    WorkoutDTO getUserWorkoutByIndex(String username, int elementIndex);
+    WorkoutDTO getUserWorkoutByWorkoutId(Long userId, Long workoutId);
 
     /**
      * Updates an existing workout.
      *
-     * @param editedWorkoutDTO The DTO representing the edited workout.
-     * @param elementIndex     The index of the workout to update.
+     * @param editedWorkoutDTO The DTO representing the updated workout.
      */
-    void editWorkout(WorkoutDTO editedWorkoutDTO, int elementIndex);
+    void editWorkout(WorkoutDTO editedWorkoutDTO);
 
     /**
      * Deletes a workout.
      *
-     * @param username       The username of the user.
-     * @param indexForDelete The index of the workout to delete.
+     * @param workoutId The ID of the workout to delete.
      */
-    void deleteWorkoutByIndex(String username, int indexForDelete);
+    void deleteWorkout(Long workoutId);
 }

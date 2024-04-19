@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.WorkoutDTO;
 import model.Workout;
 import service.WorkoutStatistics;
 
@@ -14,9 +15,9 @@ public class WorkoutStatisticsImpl implements WorkoutStatistics {
      * {@inheritDoc}
      */
     @Override
-    public int calculateTotalCaloriesBurned(List<Workout> workouts) {
+    public int calculateTotalCaloriesBurned(List<WorkoutDTO> workouts) {
         int totalCaloriesBurned = 0;
-        for (Workout workout : workouts) {
+        for (WorkoutDTO workout : workouts) {
             totalCaloriesBurned += workout.getCalories();
         }
         return totalCaloriesBurned;

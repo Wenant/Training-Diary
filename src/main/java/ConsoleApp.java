@@ -1,8 +1,8 @@
 import dto.UserDTO;
 import dto.WorkoutDTO;
+import dto.WorkoutTypeDTO;
 import model.Audit;
 import model.User;
-import model.Workout;
 import repository.UserRepository;
 import repository.WorkoutRepository;
 import repository.impl.UserRepositoryImpl;
@@ -19,6 +19,7 @@ import util.UserRoles;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.*;
 
 public class ConsoleApp {
@@ -26,7 +27,7 @@ public class ConsoleApp {
     private static final ConnectionManager connection = new ConnectionManager();
     private static final UserRepository userRepository = new UserRepositoryImpl(connection);
     private static final UserService userService = new UserServiceImpl(userRepository);
-    private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl();
+    private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl(connection);
     private static final WorkoutService workoutService = new WorkoutServiceImpl(workoutRepository);
     private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl();
     private static final List<Audit> audit = new ArrayList<>();
@@ -117,7 +118,7 @@ public class ConsoleApp {
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        UserDTO user = new UserDTO(username, password);
+        UserDTO user = new UserDTO(null, username, password);
         userService.registerUser(user);
     }
 
@@ -143,13 +144,17 @@ public class ConsoleApp {
                 case 2:
                     System.out.print("Enter your username: ");
                     var username = scanner.nextLine();
-                    var userWorkouts = workoutService.getAllUserWorkouts(username);
-                    if (userWorkouts != null && !userWorkouts.isEmpty()) {
-                        for (Workout workout : userWorkouts) {
-                            System.out.println(workout.toString());
+                    var userDTO = userService.getUserByUsername(username);
+                    if (userDTO.isPresent()) {
+                        var userId = userDTO.get().getId();
+                        var userWorkouts = workoutService.getAllUserWorkouts(userId);
+                        if (userWorkouts != null && !userWorkouts.isEmpty()) {
+                            for (WorkoutDTO workout : userWorkouts) {
+                                System.out.println(workout.toString());
+                            }
+                        } else {
+                            System.out.println("Have no previous workouts");
                         }
-                    } else {
-                        System.out.println("Have no previous workouts");
                     }
                     break;
                 case 3:
@@ -165,6 +170,7 @@ public class ConsoleApp {
 
     private static void showUserMenu(User authenticatedUser) {
         var username = authenticatedUser.getUsername();
+        var userId = authenticatedUser.getId();
 
         while (true) {
             System.out.println("\nUser Menu:");
@@ -179,23 +185,25 @@ public class ConsoleApp {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
+
+
             switch (choice) {
                 case 1:
-                    showUserWorkouts(username);
+                    showUserWorkouts(userId);
                     break;
                 case 2:
-                    addNewWorkout(username);
+                    addNewWorkout(authenticatedUser);
                     break;
                 case 3:
-                    editWorkout(username);
+                    editWorkout(userId);
 
                     break;
                 case 4:
-                    deleteWorkout(username);
+                    deleteWorkout(userId);
                     break;
                 case 5:
                     // для просмотра статистики тренировок
-                    showStatistics(username);
+                    showStatistics(userId);
                     break;
                 case 6:
                     var usernameForAudit = authenticatedUser.getUsername();
@@ -208,8 +216,8 @@ public class ConsoleApp {
         }
     }
 
-    private static void showStatistics(String username) {
-        var list = workoutService.getAllUserWorkouts(username);
+    private static void showStatistics(Long userId) {
+        var list = workoutService.getAllUserWorkouts(userId);
         if (list != null && !list.isEmpty()) {
             var totalCaloriesBurned = statistics.calculateTotalCaloriesBurned(list);
             System.out.println("On your workouts, you burned " + totalCaloriesBurned + " calories");
@@ -218,10 +226,10 @@ public class ConsoleApp {
         }
     }
 
-    private static void showUserWorkouts(String username) {
-        var list = workoutService.getAllUserWorkouts(username);
+    private static void showUserWorkouts(Long userId) {
+        var list = workoutService.getAllUserWorkouts(userId);
         if (list != null && !list.isEmpty()) {
-            for (Workout workout : list) {
+            for (WorkoutDTO workout : list) {
                 System.out.println(workout.toString());
             }
         } else {
@@ -229,7 +237,13 @@ public class ConsoleApp {
         }
     }
 
-    private static void addNewWorkout(String username) {
+    private static void addNewWorkout(User user) {
+        Long userId = user.getId();
+        System.out.println("User id is " + userId);
+        if (userId == null) {
+            System.out.println("User not found");
+            showUserMenu(user);
+        }
 
         Date date = setDate();
         String type = setWorkoutType();
@@ -267,25 +281,28 @@ public class ConsoleApp {
             }
         }
 
-        WorkoutDTO workout = new WorkoutDTO(username, date, type, duration, calories, additionalParams);
+        //WorkoutDTO workout = new WorkoutDTO(userId, date, type, duration, calories, additionalParams);
+        WorkoutDTO workout = WorkoutDTO.builder()
+                        .userId(userId)
+                        .date(date)
+                        .type(type)
+                        .duration(duration)
+                        .calories(calories)
+                        .additionalParams(additionalParams)
+                        .build();
         workoutService.addWorkout(workout);
-        audit.add(new Audit(username, "Add new workout"));
+        audit.add(new Audit(user.getUsername(), "Add new workout"));
     }
 
     private static String workoutTypeChoice() {
-        var types = workoutService.getAllWorkoutTypes();
-        System.out.println("Choose an option:");
-        for (int i = 0; i < types.size(); i++) {
-            System.out.println((i + 1) + ". " + types.get(i));
+        System.out.println("Enter workout type:");
+        List<WorkoutTypeDTO> list = workoutService.getAllWorkoutTypes();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((i + 1) + ". " + list.get(i).getType());
         }
-
-        int choice = scanner.nextInt();
-        if (choice >= 1 && choice <= types.size()) {
-            return types.get(choice - 1);
-        } else {
-            System.out.println("Invalid choice. Please choose a number between 1 and " + types.size());
-            return workoutTypeChoice();
-        }
+        int typeChoice = scanner.nextInt();
+        scanner.nextLine();
+        return list.get(typeChoice - 1).getType();
     }
 
 
@@ -320,7 +337,8 @@ public class ConsoleApp {
         String dateString = scanner.nextLine();
         Date date = null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            java.util.Date utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            date = new Date(utilDate.getTime());
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
             return setDate();
@@ -328,36 +346,38 @@ public class ConsoleApp {
         return date;
     }
 
-    private static int choiceWorkout(String username) {
-        var workouts = workoutService.getAllUserWorkouts(username);
-        System.out.println("Choose workout:");
-        for (int i = 0; i < workouts.size(); i++) {
-            System.out.println((i + 1) + ". " + workouts.get(i).toStringShort());
+    private static WorkoutDTO selectWorkout(Long userId) {
+        var userWorkouts = workoutService.getAllUserWorkouts(userId);
+        System.out.println("Choose a workout:");
+        for (int i = 0; i < userWorkouts.size(); i++) {
+            System.out.println((i + 1) + ". " + userWorkouts.get(i).toStringShort());
         }
 
         int choice = scanner.nextInt();
 
-        if (choice >= 1 && choice <= workouts.size()) {
-            return choice - 1;
-
+        if (choice >= 1 && choice <= userWorkouts.size()) {
+            var selectedWorkout = userWorkouts.get(choice - 1);
+            return selectedWorkout;
         } else {
-            System.out.println("Invalid choice. Please choose a number between 1 and " + workouts.size());
-            return choiceWorkout(username);
+            System.out.println("Invalid choice. Please choose a number between 1 and " + userWorkouts.size());
+            return selectWorkout(userId);
         }
     }
 
-    private static void editWorkout(String username) {
-        var indexForEdit = choiceWorkout(username);
-        var workoutDTO = workoutService.getUserWorkoutByIndex(username, indexForEdit);
+    private static void editWorkout(Long userId) {
+        var workoutDTO = selectWorkout(userId);
         var editedWorkoutDTO = editWorkoutDTO(workoutDTO);
-        workoutService.editWorkout(editedWorkoutDTO, indexForEdit);
-        audit.add(new Audit(username, "Edit workout"));
+        workoutService.editWorkout(editedWorkoutDTO);
+        //audit.add(new Audit(username, "Edit workout"));
+
     }
 
-    private static void deleteWorkout(String username) {
-        var indexForDelete = choiceWorkout(username);
-        workoutService.deleteWorkoutByIndex(username, indexForDelete);
-        audit.add(new Audit(username, "Delete workout"));
+    private static void deleteWorkout(Long userId) {
+        var workout = selectWorkout(userId);
+        var workoutId = workout.getId();
+        workoutService.deleteWorkout(workoutId);
+
+        //audit.add(new Audit(username, "Delete workout"));
     }
 
     private static WorkoutDTO editWorkoutDTO(WorkoutDTO workout) {
@@ -404,6 +424,7 @@ public class ConsoleApp {
             workout.setDuration(calories);
         }
 
+        Map<String, Object> newAdditionalParams = new HashMap<>();
         var additionalParams = workout.getAdditionalParams();
         for (Map.Entry<String, Object> entry : additionalParams.entrySet()) {
             System.out.println("Current additional Parameter: " + entry.getKey() + ": " + entry.getValue());
@@ -419,9 +440,13 @@ public class ConsoleApp {
                 System.out.println("Enter new parameter value:");
                 String newValue = scanner.nextLine();
 
-                additionalParams.put(newKey, newValue);
+                newAdditionalParams.put(newKey, newValue);
+            } if (choice == 2) {
+                newAdditionalParams.put(entry.getKey(), entry.getValue());
             }
         }
+            workout.setAdditionalParams(newAdditionalParams);
+
         return workout;
     }
 

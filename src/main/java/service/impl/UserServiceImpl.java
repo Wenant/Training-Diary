@@ -53,6 +53,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public Optional<UserDTO> getUserByUsername(String username) {
+        Optional<User> user = userRepository.getUserByUsername(username);
+        if (user.isEmpty()) {
+            System.out.println("User not found");
+            return Optional.empty();
+        }
+        UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(user.get());
+        return Optional.of(userDTO);
+
+    }
+
     /**
      * {@inheritDoc}
      */

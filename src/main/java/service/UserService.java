@@ -28,6 +28,15 @@ public interface UserService {
     Optional<User> authenticateUser(String username, String password);
 
     /**
+     * Retrieves a specific user by username.
+     *
+     * @param username The username of the user.
+     * @return The user with the specified username.
+     */
+    Optional<UserDTO> getUserByUsername(String username);
+
+
+    /**
      * Retrieves a list of all users.
      *
      * @return A dto list of all users.

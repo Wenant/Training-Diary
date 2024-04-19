@@ -1,9 +1,9 @@
 package service.impl;
 
 import dto.WorkoutDTO;
+import dto.WorkoutTypeDTO;
 import lombok.RequiredArgsConstructor;
 import mapper.WorkoutMapper;
-import model.Workout;
 import repository.WorkoutRepository;
 import service.WorkoutService;
 
@@ -24,6 +24,16 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void addWorkout(WorkoutDTO workoutDTO) {
         var workout = WorkoutMapper.INSTANCE.workoutDTOToWorkout(workoutDTO);
         workoutRepository.addWorkout(workout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<WorkoutDTO> getAllUserWorkouts(Long userId) {
+        var userWorkouts = workoutRepository.getAllUserWorkouts(userId);
+        return WorkoutMapper.INSTANCE.workoutListToWorkoutDTOList(userWorkouts);
+
 
     }
 
@@ -31,16 +41,9 @@ public class WorkoutServiceImpl implements WorkoutService {
      * {@inheritDoc}
      */
     @Override
-    public List<Workout> getAllUserWorkouts(String username) {
-        return workoutRepository.getAllUserWorkouts(username);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getAllWorkoutTypes() {
-        return workoutRepository.getAllWorkoutTypes();
+    public List<WorkoutTypeDTO> getAllWorkoutTypes() {
+        var workoutTypes = workoutRepository.getAllWorkoutTypes();
+        return WorkoutMapper.INSTANCE.workoutTypesToWorkoutTypeDTOList(workoutTypes);
     }
 
     /**
@@ -55,8 +58,8 @@ public class WorkoutServiceImpl implements WorkoutService {
      * {@inheritDoc}
      */
     @Override
-    public WorkoutDTO getUserWorkoutByIndex(String username, int elementIndex) {
-        var workout = workoutRepository.getUserWorkoutByIndex(username, elementIndex);
+    public WorkoutDTO getUserWorkoutByWorkoutId(Long userId, Long workoutId) {
+        var workout = workoutRepository.getUserWorkoutByWorkoutId(userId, workoutId);
         return WorkoutMapper.INSTANCE.workoutToWorkoutDTO(workout);
     }
 
@@ -64,9 +67,9 @@ public class WorkoutServiceImpl implements WorkoutService {
      * {@inheritDoc}
      */
     @Override
-    public void editWorkout(WorkoutDTO editedWorkoutDTO, int elementIndex) {
+    public void editWorkout(WorkoutDTO editedWorkoutDTO) {
         var workout = WorkoutMapper.INSTANCE.workoutDTOToWorkout(editedWorkoutDTO);
-        workoutRepository.editWorkout(workout, elementIndex);
+        workoutRepository.editWorkout(workout);
 
     }
 
@@ -74,7 +77,7 @@ public class WorkoutServiceImpl implements WorkoutService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteWorkoutByIndex(String username, int indexForDelete) {
-        workoutRepository.deleteWorkoutByIndex(username, indexForDelete);
+    public void deleteWorkout(Long workoutId) {
+        workoutRepository.deleteWorkout(workoutId);
     }
 }

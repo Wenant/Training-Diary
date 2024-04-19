@@ -11,6 +11,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
+
+    /**
+     * The id of the user.
+     */
+    private Long id;
+
     /**
      * The username of the user.
      */

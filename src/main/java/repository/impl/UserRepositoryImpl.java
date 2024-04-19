@@ -52,6 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     User user = new User();
+                    user.setId(resultSet.getLong("id"));
                     user.setUsername(resultSet.getString("username"));
                     user.setPassword(resultSet.getString("password"));
                     user.setRole(UserRoles.valueOf(resultSet.getString("role")));
@@ -100,6 +101,7 @@ public class UserRepositoryImpl implements UserRepository {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     User user = new User();
+                    user.setId(resultSet.getLong("id"));
                     user.setUsername(resultSet.getString("username"));
                     user.setPassword(resultSet.getString("password"));
                     user.setRole(UserRoles.valueOf(resultSet.getString("role")));
