@@ -54,6 +54,7 @@ public class UserInputReader {
         } while (day < 1 || day > 31);
 
         Date date = new Date(year - 1900, month - 1, day);
+
         return date;
     }
 

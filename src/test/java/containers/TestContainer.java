@@ -3,6 +3,7 @@ package containers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.PostgreSQLContainer;
+
 public abstract class TestContainer {
 
     public static final String IMAGE_VERSION = "postgres:14";
