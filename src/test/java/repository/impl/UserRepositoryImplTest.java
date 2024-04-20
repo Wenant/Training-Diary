@@ -32,8 +32,8 @@ class UserRepositoryImplTest extends TestContainer {
 
 
     @Test
-    @DisplayName("Registering a new user")
-    public void registerUser() {
+    @DisplayName("Registering a new user should create a new user record")
+    public void shouldCreateNewUserWhenRegisteringUser() {
         User userToRegister = new User();
         userToRegister.setUsername("testLogin");
         userToRegister.setPassword("testPassword");
@@ -49,8 +49,8 @@ class UserRepositoryImplTest extends TestContainer {
     }
 
     @Test
-    @DisplayName("Getting user by username")
-    void getUserByUsername() {
+    @DisplayName("Getting user by username should return the correct user")
+    void shouldReturnCorrectUserWhenGettingUserByUsername() {
         User user = userRepository.getUserByUsername("testLogin").orElse(null);
         assertThat(user.getUsername()).isEqualTo("testLogin");
         assertThat(user.getPassword()).isEqualTo("testPassword");

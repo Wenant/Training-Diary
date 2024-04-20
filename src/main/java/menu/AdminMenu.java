@@ -37,18 +37,13 @@ public class AdminMenu {
             int choice = reader.readInt();
 
             switch (choice) {
-                case 1:
-                    viewUsers();
-                    break;
-                case 2:
-                    viewUserWorkouts();
-                    break;
-                case 3:
+                case 1 -> viewUsers();
+                case 2 -> viewUserWorkouts();
+                case 3 -> {
                     logout(authenticatedUser);
-
                     return;
-                default:
-                    System.out.println("Invalid choice");
+                }
+                default -> System.out.println("Invalid choice");
             }
         }
     }

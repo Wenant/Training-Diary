@@ -47,27 +47,17 @@ public class UserMenu {
             int choice = reader.readInt();
 
             switch (choice) {
-                case 1:
-                    viewPreviousWorkouts(userId);
-                    break;
-                case 2:
-                    addNewWorkout(authenticatedUser);
-                    break;
-                case 3:
-                    editWorkout(userId);
-                    break;
-                case 4:
-                    deleteWorkout(userId);
-                    break;
-                case 5:
-                    viewStatistics(userId);
-                    break;
-                case 6:
+                case 1 -> viewPreviousWorkouts(userId);
+                case 2 -> addNewWorkout(authenticatedUser);
+                case 3 -> editWorkout(userId);
+                case 4 -> deleteWorkout(userId);
+                case 5 -> viewStatistics(userId);
+                case 6 -> {
                     auditRepository.addAudit(new Audit(userId, "Logout"));
                     System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println("Invalid choice");
+                }
+                default -> System.out.println("Invalid choice");
             }
         }
 
@@ -107,19 +97,16 @@ public class UserMenu {
             int choice = reader.readInt();
 
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.println("Enter parameter name:");
                     String key = reader.readString();
                     System.out.println("Enter parameter value:");
                     String value = reader.readString();
                     additionalParams.put(key, value);
-                    break;
-                case 2:
-                    continueAddingParams = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter either 1 or 2.");
-                    break;
+                }
+                case 2 -> continueAddingParams = false;
+                default -> System.out.println("Invalid choice. Please enter either 1 or 2.");
+
             }
         }
 
@@ -140,7 +127,6 @@ public class UserMenu {
         System.out.println("Pick workout type:");
         System.out.println("1. Choose from the list");
         System.out.println("2. Add your own");
-
         int typeChoice = reader.readInt();
 
         switch (typeChoice) {
@@ -274,14 +260,12 @@ public class UserMenu {
     }
 
     private void viewStatistics(Long userId) {
-        var list = workoutService.getAllUserWorkouts(userId);
-        if (list != null && !list.isEmpty()) {
-            var totalCaloriesBurned = statistics.calculateTotalCaloriesBurned(list);
-            System.out.println("On your workouts, you burned " + totalCaloriesBurned + " calories");
-        } else {
-            System.out.println("Have no previous workouts");
-        }
+        System.out.println("Enter start date:");
+        Date start = reader.readDate();
+        System.out.println("Enter end date:");
+        Date end = reader.readDate();
+        var totalCalories = statistics.getTotalCaloriesBetweenDates(userId, start, end);
+        System.out.println("Total calories burned: " + totalCalories);
     }
-
 
 }

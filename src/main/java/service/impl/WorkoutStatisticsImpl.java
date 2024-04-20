@@ -1,24 +1,24 @@
 package service.impl;
 
-import dto.WorkoutDTO;
+import lombok.RequiredArgsConstructor;
+import repository.WorkoutStatisticsRepository;
 import service.WorkoutStatistics;
 
-import java.util.List;
+import java.sql.Date;
 
 /**
  * Implementation of WorkoutStatistics for calculating workout statistics.
  */
+@RequiredArgsConstructor
 public class WorkoutStatisticsImpl implements WorkoutStatistics {
+    private final WorkoutStatisticsRepository statisticsRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int calculateTotalCaloriesBurned(List<WorkoutDTO> workouts) {
-        int totalCaloriesBurned = 0;
-        for (WorkoutDTO workout : workouts) {
-            totalCaloriesBurned += workout.getCalories();
-        }
-        return totalCaloriesBurned;
+    public int getTotalCaloriesBetweenDates(Long userId, Date start, Date end) {
+        return statisticsRepository.getTotalCaloriesBetweenDates(userId, start, end);
     }
+
 }

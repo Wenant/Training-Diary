@@ -7,9 +7,11 @@ import model.User;
 import repository.AuditRepository;
 import repository.UserRepository;
 import repository.WorkoutRepository;
+import repository.WorkoutStatisticsRepository;
 import repository.impl.AuditRepositoryImpl;
 import repository.impl.UserRepositoryImpl;
 import repository.impl.WorkoutRepositoryImpl;
+import repository.impl.WorkoutStatisticsRepositoryImpl;
 import service.UserService;
 import service.WorkoutService;
 import service.WorkoutStatistics;
@@ -36,7 +38,8 @@ public class AppMenu {
     private static final AuditRepository auditRepository = new AuditRepositoryImpl(connection);
     private static final WorkoutRepository workoutRepository = new WorkoutRepositoryImpl(connection);
     private static final WorkoutService workoutService = new WorkoutServiceImpl(workoutRepository);
-    private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl();
+    private static final WorkoutStatisticsRepository statisticsRepository = new WorkoutStatisticsRepositoryImpl(connection);
+    private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl(statisticsRepository);
     static UserInputReader reader = new UserInputReader(scanner);
     static AdminMenu adminMenu = new AdminMenu(userService, workoutService, audit, reader);
     static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader, auditRepository);
@@ -50,18 +53,13 @@ public class AppMenu {
             showMainMenu();
             int choice = reader.readInt();
             switch (choice) {
-                case 1:
-                    login();
-                    break;
-                case 2:
-                    register();
-                    break;
-                case 3:
+                case 1 -> login();
+                case 2 -> register();
+                case 3 -> {
                     System.out.println("Exiting program...");
                     System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid choice");
+                }
+                default -> System.out.println("Invalid choice");
             }
         }
     }
