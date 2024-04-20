@@ -11,6 +11,11 @@ public class UserInputReader {
     private final Scanner scanner;
 
 
+    /**
+     * Reads a string from the user.
+     *
+     * @return The read string.
+     */
     public String readString() {
         String input;
         while (true) {
@@ -24,6 +29,11 @@ public class UserInputReader {
         return input;
     }
 
+    /**
+     * Reads a date from the user.
+     *
+     * @return The read date.
+     */
     public Date readDate() {
         Scanner scanner = new Scanner(System.in);
         int year, month, day;
@@ -47,6 +57,11 @@ public class UserInputReader {
         return date;
     }
 
+    /**
+     * Reads an integer from the user.
+     *
+     * @return The read integer.
+     */
     public int readInt() {
         Scanner scanner = new Scanner(System.in);
         int num;
@@ -67,6 +82,12 @@ public class UserInputReader {
         return num;
     }
 
+    /**
+     * Checks if a number is valid.
+     *
+     * @param num The number to check.
+     * @return True if the number is valid, false otherwise.
+     */
     private boolean isValidInt(long num) {
         return num >= 0 && num <= Integer.MAX_VALUE;
     }

@@ -43,6 +43,9 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> getUserByUsername(String username) {
         String sql = "SELECT * FROM ylab_hw.users WHERE username = ?";

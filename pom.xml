@@ -19,6 +19,7 @@
         <org.assertj.version>3.25.3</org.assertj.version>
         <org.postgresql.version>42.7.3</org.postgresql.version>
         <com.fasterxml.jackson.core.version>2.17.0</com.fasterxml.jackson.core.version>
+        <org.liquibase.version>4.27.0</org.liquibase.version>
     </properties>
 
     <dependencies>
@@ -50,6 +51,12 @@
             <artifactId>postgresql</artifactId>
             <version>${org.postgresql.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${org.liquibase.version}</version>
+        </dependency>
+
 
 
         <dependency>

@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The user menu of the application.
+ */
 @AllArgsConstructor
 public class UserMenu {
     private final WorkoutStatistics statistics;
@@ -24,6 +27,11 @@ public class UserMenu {
     private final AuditRepository auditRepository;
 
 
+    /**
+     * Shows the user menu.
+     *
+     * @param authenticatedUser The authenticated user.
+     */
     public void showMenu(User authenticatedUser) {
         var userId = authenticatedUser.getId();
         while (true) {
@@ -81,7 +89,7 @@ public class UserMenu {
         Long userId = user.getId();
 
         Date date = reader.readDate();
-        String type = setWorkoutType();
+        Long type = setWorkoutType();
 
         System.out.println("Enter workout duration (in minutes):");
         int duration = reader.readInt();
@@ -128,7 +136,7 @@ public class UserMenu {
     }
 
 
-    private String setWorkoutType() {
+    private Long setWorkoutType() {
         System.out.println("Pick workout type:");
         System.out.println("1. Choose from the list");
         System.out.println("2. Add your own");
@@ -141,26 +149,27 @@ public class UserMenu {
             case 2:
                 System.out.println("Enter your own type:");
                 String customType = reader.readString();
-                addNewWorkoutType(customType);
-                return customType;
+                var typeId = addNewWorkoutType(customType);
+                return typeId;
             default:
                 System.out.println("Invalid choice. Please enter either 1 or 2.");
                 return setWorkoutType();
         }
     }
 
-    private String workoutTypeChoice() {
+    private Long workoutTypeChoice() {
         System.out.println("Enter workout type:");
         List<WorkoutTypeDTO> list = workoutService.getAllWorkoutTypes();
         for (int i = 0; i < list.size(); i++) {
             System.out.println((i + 1) + ". " + list.get(i).getType());
         }
         int typeChoice = reader.readInt();
-        return list.get(typeChoice - 1).getType();
+        return list.get(typeChoice - 1).getId();
     }
 
-    private void addNewWorkoutType(String type) {
-        workoutService.addNewWorkoutTyp(type);
+    private Long addNewWorkoutType(String type) {
+        return workoutService.addNewWorkoutType(type);
+
     }
 
     private void editWorkout(Long userId) {

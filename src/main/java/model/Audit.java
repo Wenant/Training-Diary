@@ -44,17 +44,4 @@ public class Audit {
         this.action = action;
     }
 
-    /**
-     * Returns a string representation of the audit log entry.
-     *
-     * @return A string representation of the audit log entry.
-     */
-    @Override
-    public String toString() {
-        return "AuditLog{" +
-                "Time: " + timestamp +
-                ", User ID: '" + userId + '\'' +
-                ", Action: '" + action + '\'' +
-                '}' + "\n";
-    }
 }

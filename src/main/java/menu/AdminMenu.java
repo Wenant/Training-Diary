@@ -11,6 +11,9 @@ import service.WorkoutService;
 
 import java.util.List;
 
+/**
+ * The admin menu of the application.
+ */
 @AllArgsConstructor
 public class AdminMenu {
     private final UserService userService;
@@ -18,6 +21,11 @@ public class AdminMenu {
     private final List<Audit> audit;
     private final UserInputReader reader;
 
+    /**
+     * Shows the admin menu.
+     *
+     * @param authenticatedUser The authenticated user.
+     */
     public void showMenu(User authenticatedUser) {
         while (true) {
             System.out.println("\nAdmin Menu:");
@@ -45,6 +53,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * View all users.
+     */
     private void viewUsers() {
         var userList = userService.getAllUsers();
         for (UserDTO user : userList) {
@@ -52,6 +63,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * View user's previous workouts.
+     */
     private void viewUserWorkouts() {
         System.out.print("Enter username: ");
         String username = reader.readString();
@@ -72,6 +86,11 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * Logs out the user.
+     *
+     * @param authenticatedUser The authenticated user.
+     */
     private void logout(User authenticatedUser) {
         var userId = authenticatedUser.getId();
         audit.add(new Audit(userId, "Logout"));

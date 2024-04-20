@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * The application menu class.
+ */
 public class AppMenu {
     private static final List<Audit> audit = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
@@ -38,6 +41,10 @@ public class AppMenu {
     static AdminMenu adminMenu = new AdminMenu(userService, workoutService, audit, reader);
     static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader, auditRepository);
 
+
+    /**
+     * Runs the application menu.
+     */
     public static void run() {
         while (true) {
             showMainMenu();
@@ -59,6 +66,9 @@ public class AppMenu {
         }
     }
 
+    /**
+     * Shows starting menu.
+     */
     private static void showMainMenu() {
         System.out.println("\n Welcome to Training Diary!");
         System.out.println("1. Login");
@@ -67,6 +77,9 @@ public class AppMenu {
         System.out.print("Enter your choice: ");
     }
 
+    /**
+     * Shows login menu.
+     */
     private static void login() {
         System.out.println("Login");
         System.out.print("Enter your username: ");
@@ -91,6 +104,9 @@ public class AppMenu {
         }
     }
 
+    /**
+     * Shows registration menu.
+     */
     private static void register() {
         System.out.println("Registration");
         System.out.print("Enter your username: ");

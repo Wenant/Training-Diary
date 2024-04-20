@@ -44,6 +44,12 @@ public interface WorkoutMapper {
      */
     List<WorkoutDTO> workoutListToWorkoutDTOList(List<Workout> workouts);
 
+    /**
+     * Converts a WorkoutType object to a WorkoutTypeDTO object.
+     *
+     * @param workoutType The WorkoutType object to convert.
+     * @return The converted WorkoutTypeDTO object.
+     */
     WorkoutTypeDTO workoutTypeToWorkoutTypeDTO(WorkoutType workoutType);
 
     /**

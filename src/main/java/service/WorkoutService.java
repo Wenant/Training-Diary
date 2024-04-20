@@ -37,7 +37,7 @@ public interface WorkoutService {
      *
      * @param type The new workout type to add.
      */
-    void addNewWorkoutTyp(String type);
+    Long addNewWorkoutType(String type);
 
     /**
      * Retrieves a specific user's workout by index.

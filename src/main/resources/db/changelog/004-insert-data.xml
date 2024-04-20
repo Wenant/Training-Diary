@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.10.xsd"
+        logicalFilePath="db/changelog.xml">
+    <changeSet id="002-insert-data.xml" author="wenant">
+
+        <insert schemaName="ylab_hw" tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="users">
+            <column name="username" value="q"/>
+            <column name="password" value="q"/>
+            <column name="role" value="USER"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="users">
+            <column name="username" value="user"/>
+            <column name="password" value="user"/>
+            <column name="role" value="USER"/>
+        </insert>
+
+        <insert schemaName="ylab_hw" tableName="workout_type">
+            <column name="type" value="running"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="workout_type">
+            <column name="type" value="weightlifting"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="workout_type">
+            <column name="type" value="cycling"/>
+        </insert>
+
+        <insert schemaName="ylab_hw" tableName="workouts">
+            <column name="user_id" value="2"/>
+            <column name="date" value="2010-10-10"/>
+            <column name="type" value="2"/>
+            <column name="duration" value="10"/>
+            <column name="calories" value="10"/>
+            <column name="additional_params" value="{}"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="workouts">
+            <column name="user_id" value="2"/>
+            <column name="date" value="2010-11-11"/>
+            <column name="type" value="2"/>
+            <column name="duration" value="20"/>
+            <column name="calories" value="20"/>
+            <column name="additional_params" value="{}"/>
+        </insert>
+        <insert schemaName="ylab_hw" tableName="workouts">
+            <column name="user_id" value="2"/>
+            <column name="date" value="2010-12-10"/>
+            <column name="type" value="2"/>
+            <column name="duration" value="30"/>
+            <column name="calories" value="30"/>
+            <column name="additional_params" value="{}"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

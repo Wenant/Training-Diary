@@ -50,8 +50,8 @@ public class WorkoutServiceImpl implements WorkoutService {
      * {@inheritDoc}
      */
     @Override
-    public void addNewWorkoutTyp(String type) {
-        workoutRepository.addNewWorkoutType(type);
+    public Long addNewWorkoutType(String type) {
+        return workoutRepository.addNewWorkoutType(type);
     }
 
     /**

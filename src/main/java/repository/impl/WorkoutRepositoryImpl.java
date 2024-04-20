@@ -19,7 +19,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WorkoutRepositoryImpl implements WorkoutRepository {
     private final ConnectionManager connectionManager;
-    private final Map<String, List<Workout>> userWorkouts = new HashMap<>();
     private final List<WorkoutType> workoutTypes = new ArrayList<>();
 
     /**
@@ -34,7 +33,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, newWorkout.getUserId());
             preparedStatement.setDate(2, newWorkout.getDate());
-            preparedStatement.setString(3, newWorkout.getType());
+            preparedStatement.setLong(3, newWorkout.getType());
             preparedStatement.setInt(4, newWorkout.getDuration());
             preparedStatement.setInt(5, newWorkout.getCalories());
             preparedStatement.setString(6, json);
@@ -45,6 +44,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
         }
 
     }
+
 
     /**
      * {@inheritDoc}
@@ -58,15 +58,16 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
             preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    Long id = resultSet.getLong("id");
-                    Long userId1 = resultSet.getLong("user_id");
-                    Date date = resultSet.getDate("date");
-                    String type = resultSet.getString("type");
-                    int duration = resultSet.getInt("duration");
-                    int calories = resultSet.getInt("calories");
-                    String json = resultSet.getString("additional_params");
+                    var id = resultSet.getLong("id");
+                    var workoutUerId = resultSet.getLong("user_id");
+                    var date = resultSet.getDate("date");
+                    var type = resultSet.getLong("type");
+                    var duration = resultSet.getInt("duration");
+                    var calories = resultSet.getInt("calories");
+                    var json = resultSet.getString("additional_params");
                     var additionalParams = MapToJsonConverter.jsonToMap(json);
-                    var workout = new Workout(id, userId1, date, type, duration, calories, additionalParams);
+                    var typeName = getWorkoutTypeName(type);
+                    var workout = new Workout(id, workoutUerId, date, type, typeName, duration, calories, additionalParams);
                     userWorkouts.add(workout);
                 }
             }
@@ -105,17 +106,23 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
      * {@inheritDoc}
      */
     @Override
-    public void addNewWorkoutType(String type) {
+    public Long addNewWorkoutType(String type) {
         String sql = "INSERT INTO ylab_hw.workout_type (type) VALUES (?)";
+        Long generatedId = -1L;
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, type);
             preparedStatement.executeUpdate();
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = (long) generatedKeys.getInt(1);
+            }
         } catch (SQLException e) {
             System.out.println("Error while adding new workout type: " + e.getMessage());
             e.printStackTrace();
         }
-
+        return generatedId;
     }
 
     /**
@@ -130,14 +137,15 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
             preparedStatement.setLong(2, workoutId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    Long id = resultSet.getLong("id");
-                    Date date = resultSet.getDate("date");
-                    String type = resultSet.getString("type");
-                    int duration = resultSet.getInt("duration");
-                    int calories = resultSet.getInt("calories");
-                    String json = resultSet.getString("additional_params");
+                    var id = resultSet.getLong("id");
+                    var date = resultSet.getDate("date");
+                    var type = resultSet.getLong("type");
+                    var duration = resultSet.getInt("duration");
+                    var calories = resultSet.getInt("calories");
+                    var json = resultSet.getString("additional_params");
                     var additionalParams = MapToJsonConverter.jsonToMap(json);
-                    var workout = new Workout(id, userId, date, type, duration, calories, additionalParams);
+                    var typeName = getWorkoutTypeName(type);
+                    var workout = new Workout(id, userId, date, type, typeName, duration, calories, additionalParams);
                     return workout;
                 }
             }
@@ -167,7 +175,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, editedWorkout.getUserId());
             preparedStatement.setDate(2, editedWorkout.getDate());
-            preparedStatement.setString(3, editedWorkout.getType());
+            preparedStatement.setLong(3, editedWorkout.getType());
             preparedStatement.setInt(4, editedWorkout.getDuration());
             preparedStatement.setInt(5, editedWorkout.getCalories());
             preparedStatement.setString(6, json);
@@ -198,15 +206,24 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
     }
 
     /**
-     * Checks if a workout with the same date and type already exists in the given list of workouts.
-     *
-     * @param workouts   The list of workouts to check.
-     * @param newWorkout The new workout to compare.
-     * @return True if a workout with the same date and type exists, otherwise false.
+     * {@inheritDoc}
      */
-    public boolean containsWorkout(List<Workout> workouts, Workout newWorkout) {
-        return workouts.stream()
-                .anyMatch(workout -> workout.getDate().equals(newWorkout.getDate()) &&
-                        workout.getType().equals(newWorkout.getType()));
+    private String getWorkoutTypeName(Long typeId) {
+        String typeName = null;
+        String sql = "SELECT type FROM ylab_hw.workout_type WHERE id = ?";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, typeId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    typeName = resultSet.getString("type");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while getting workout type name: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return typeName;
     }
+
 }

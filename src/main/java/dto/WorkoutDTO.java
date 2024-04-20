@@ -35,7 +35,12 @@ public class WorkoutDTO {
     /**
      * The type of workout.
      */
-    private String type;
+    private Long type;
+
+    /**
+     * The name of the workout type.
+     */
+    private String typeName;
 
     /**
      * The duration of the workout in minutes.
@@ -53,16 +58,26 @@ public class WorkoutDTO {
     private Map<String, Object> additionalParams;
 
 
+    /**
+     * Returns a string representation of the workout.
+     *
+     * @return A string representation of the workout.
+     */
     public String toStringShort() {
-        return "Workout ID: " + id + ", Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + type;
+        return "Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + typeName;
     }
 
+    /**
+     * Returns a string representation of the workout.
+     *
+     * @return A string representation of the workout.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nWorkout Details:");
         sb.append("\nDate: ").append(new SimpleDateFormat("yyyy-MM-dd").format(date));
-        sb.append("\nType: ").append(type);
+        sb.append("\nType: ").append(typeName);
         sb.append("\nDuration: ").append(duration).append(" minutes");
         sb.append("\nCalories: ").append(calories);
         if (additionalParams != null && !additionalParams.isEmpty()) {
