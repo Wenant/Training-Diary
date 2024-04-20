@@ -14,12 +14,12 @@ import java.sql.SQLException;
  * Class for running Liquibase migrations.
  */
 public class LiquibaseMigration {
-    private static final ConnectionManager connectionManager = new ConnectionManager();
+
 
     /**
      * Runs the Liquibase migrations.
      */
-    public static void runMigrations() {
+    public static void runMigrations(ConnectionManager connectionManager) {
         try {
             Connection connection = connectionManager.getConnection();
             Database database =

@@ -20,6 +20,8 @@
         <org.postgresql.version>42.7.3</org.postgresql.version>
         <com.fasterxml.jackson.core.version>2.17.0</com.fasterxml.jackson.core.version>
         <org.liquibase.version>4.27.0</org.liquibase.version>
+        <org.testcontainers.version>1.19.7</org.testcontainers.version>
+        <org.testcontainers.junit-jupiter.version>1.19.1</org.testcontainers.junit-jupiter.version>
     </properties>
 
     <dependencies>
@@ -77,6 +79,19 @@
             <version>${org.junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${org.testcontainers.junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
