@@ -65,5 +65,5 @@
         <setTableRemarks schemaName="ylab_hw" tableName="audit"
                          remarks="This table stores audit logs, including timestamps, user IDs, and actions performed."/>
     </changeSet>
-    
+
 </databaseChangeLog>

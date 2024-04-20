@@ -24,11 +24,37 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
      */
     @Override
     public void addWorkout(Workout newWorkout) {
-        String sql = "INSERT INTO ylab_hw.workouts (user_id, date, type, duration, calories, additional_params) VALUES (?, ?, ?, ?, ?, ?::jsonb)";
+        String checkExistingWorkoutQuery = "SELECT COUNT(*) AS count " +
+                "FROM ylab_hw.workouts " +
+                "WHERE user_id = ? AND type = ? AND date = ?";
+
+        String sql = "INSERT INTO ylab_hw.workouts (" +
+                "user_id, " +
+                "date, " +
+                "type, " +
+                "duration, " +
+                "calories, " +
+                "additional_params) " +
+                "VALUES (?, ?, ?, ?, ?, ?::jsonb)";
         String json = MapToJsonConverter.mapToJson(newWorkout.getAdditionalParams());
 
         try (Connection connection = connectionManager.getConnection();
+             PreparedStatement checkExistingWorkoutStatement = connection.prepareStatement(checkExistingWorkoutQuery);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            checkExistingWorkoutStatement.setLong(1, newWorkout.getUserId());
+            checkExistingWorkoutStatement.setLong(2, newWorkout.getType());
+            checkExistingWorkoutStatement.setDate(3, newWorkout.getDate());
+            ResultSet resultSet = checkExistingWorkoutStatement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                if (count > 0) {
+                    System.out.println("A workout of the same type " +
+                            "already exists for this user on the specified date. Unable to add a new workout.");
+                    return;
+                }
+            }
+
             preparedStatement.setLong(1, newWorkout.getUserId());
             preparedStatement.setDate(2, newWorkout.getDate());
             preparedStatement.setLong(3, newWorkout.getType());
