@@ -1,0 +1,11 @@
+version: '3'
+services:
+  base-project-pg:
+    container_name: tracing-diary-pg
+    image: postgres:14
+    environment:
+      POSTGRES_USER: wenant
+      POSTGRES_PASSWORD: wenant
+      POSTGRES_DB: tracing-diary-pg
+    ports:
+      - '5438:5432'
