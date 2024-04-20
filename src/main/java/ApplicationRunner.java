@@ -17,6 +17,5 @@ public class ApplicationRunner {
         LiquibaseMigration.runMigrations(connectionManager);
         AppMenu.run();
 
-
     }
 }

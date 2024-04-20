@@ -12,7 +12,6 @@ public class WorkoutStatisticsRepositoryImpl implements WorkoutStatisticsReposit
     private final ConnectionManager connectionManager;
 
 
-
     /**
      * {@inheritDoc}
      */

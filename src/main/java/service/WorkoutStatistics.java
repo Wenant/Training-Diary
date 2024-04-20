@@ -19,7 +19,7 @@ public interface WorkoutStatistics {
      * @param end          the end date of the date range (inclusive). Ignored if filterByDate is false.
      * @param columnName   the name of the column for which to calculate the total value.
      * @return the total value of the specified column for the given user within the specified date range,
-     *         or for all time if filterByDate is false.
+     * or for all time if filterByDate is false.
      */
     int getTotal(Long userId, boolean filterByDate, Date start, Date end, String columnName);
 }

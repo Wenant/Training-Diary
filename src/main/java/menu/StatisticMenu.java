@@ -47,8 +47,7 @@ public class StatisticMenu {
         switch (choice) {
             case 1 -> printTotalStatistics(userId, false, null, null, "calories");
             case 2 -> printDateRangeStatistics(userId, "calories");
-            case 3-> {
-                return;
+            case 3 -> {
             }
             default -> {
                 System.out.println("Invalid choice. Please try again.");
@@ -70,10 +69,10 @@ public class StatisticMenu {
             case 1 -> printTotalStatistics(userId, false, null, null, "duration");
             case 2 -> printDateRangeStatistics(userId, "duration");
             case 3 -> {
-                return;
             }
-            default -> {System.out.println("Invalid choice. Please try again.");
-            viewDurationStatistics(userId);
+            default -> {
+                System.out.println("Invalid choice. Please try again.");
+                viewDurationStatistics(userId);
             }
         }
     }
