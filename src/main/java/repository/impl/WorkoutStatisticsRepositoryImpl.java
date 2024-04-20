@@ -12,24 +12,32 @@ public class WorkoutStatisticsRepositoryImpl implements WorkoutStatisticsReposit
     private final ConnectionManager connectionManager;
 
 
-    @Override
-    public int getTotalCaloriesBetweenDates(Long userId, Date start, Date end) {
-        int totalCalories = 0;
-        String sql = "SELECT SUM(calories) FROM ylab_hw.workouts WHERE user_id = ? AND date BETWEEN ? AND ?";
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getTotal(Long userId, boolean filterByDate, Date start, Date end, String columnName) {
+        int total = 0;
+        String dateFilter = filterByDate ? "AND date BETWEEN ? AND ?" : "";
+        String sql = "SELECT SUM(" + columnName + ") FROM ylab_hw.workouts WHERE user_id = ? " + dateFilter;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, userId);
-            preparedStatement.setDate(2, start);
-            preparedStatement.setDate(3, end);
+            if (filterByDate) {
+                preparedStatement.setDate(2, start);
+                preparedStatement.setDate(3, end);
+            }
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    totalCalories = resultSet.getInt(1);
+                    total = resultSet.getInt(1);
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error while getting total calories between dates: " + e.getMessage());
+            System.out.println("Error while getting total " + columnName + (filterByDate ? " between dates" : "") + ": " + e.getMessage());
             e.printStackTrace();
         }
-        return totalCalories;
+        return total;
     }
+
+
 }

@@ -75,7 +75,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository {
      */
     @Override
     public List<Workout> getAllUserWorkouts(Long userId) {
-        String sql = "SELECT * FROM ylab_hw.workouts WHERE user_id = ?";
+        String sql = "SELECT * FROM ylab_hw.workouts WHERE user_id = ? ORDER BY date ASC";
         List<Workout> userWorkouts = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

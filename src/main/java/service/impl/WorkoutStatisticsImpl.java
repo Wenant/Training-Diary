@@ -17,8 +17,8 @@ public class WorkoutStatisticsImpl implements WorkoutStatistics {
      * {@inheritDoc}
      */
     @Override
-    public int getTotalCaloriesBetweenDates(Long userId, Date start, Date end) {
-        return statisticsRepository.getTotalCaloriesBetweenDates(userId, start, end);
+    public int getTotal(Long userId, boolean filterByDate, Date start, Date end, String columnName) {
+        return statisticsRepository.getTotal(userId, filterByDate, start, end, columnName);
     }
 
 }

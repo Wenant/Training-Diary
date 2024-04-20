@@ -41,8 +41,10 @@ public class AppMenu {
     private static final WorkoutStatisticsRepository statisticsRepository = new WorkoutStatisticsRepositoryImpl(connection);
     private static final WorkoutStatistics statistics = new WorkoutStatisticsImpl(statisticsRepository);
     static UserInputReader reader = new UserInputReader(scanner);
+    private static final StatisticMenu statisticMenu = new StatisticMenu(statistics, reader);
     static AdminMenu adminMenu = new AdminMenu(userService, workoutService, audit, reader);
-    static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader, auditRepository);
+    static UserMenu userMenu = new UserMenu(statistics, workoutService, audit, reader, auditRepository, statisticMenu);
+
 
 
     /**

@@ -26,6 +26,8 @@ public class UserMenu {
     private final UserInputReader reader;
     private final AuditRepository auditRepository;
 
+    private StatisticMenu statisticMenu;
+
 
     /**
      * Shows the user menu.
@@ -51,7 +53,7 @@ public class UserMenu {
                 case 2 -> addNewWorkout(authenticatedUser);
                 case 3 -> editWorkout(userId);
                 case 4 -> deleteWorkout(userId);
-                case 5 -> viewStatistics(userId);
+                case 5 -> statisticMenu.showMenu(userId);//viewStatistics(userId);
                 case 6 -> {
                     auditRepository.addAudit(new Audit(userId, "Logout"));
                     System.out.println("Exiting...");
@@ -257,15 +259,6 @@ public class UserMenu {
             System.out.println("Invalid choice. Please choose a number between 1 and " + userWorkouts.size());
             return selectWorkout(userId);
         }
-    }
-
-    private void viewStatistics(Long userId) {
-        System.out.println("Enter start date:");
-        Date start = reader.readDate();
-        System.out.println("Enter end date:");
-        Date end = reader.readDate();
-        var totalCalories = statistics.getTotalCaloriesBetweenDates(userId, start, end);
-        System.out.println("Total calories burned: " + totalCalories);
     }
 
 }
