@@ -1,11 +1,12 @@
 package model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -14,12 +15,19 @@ import java.util.Map;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class Workout {
 
     /**
-     * The username of the user who completed the workout.
+     * The id of the workout.
      */
-    private String username;
+    private Long id;
+
+    /**
+     * The id of the user who completed the workout.
+     */
+    private Long userId;
+
 
     /**
      * The date when the workout was completed.
@@ -29,7 +37,13 @@ public class Workout {
     /**
      * The type of workout.
      */
-    private String type;
+    private Long type;
+
+
+    /**
+     * The name of the workout type.
+     */
+    private String typeName;
 
     /**
      * The duration of the workout in minutes.
@@ -55,9 +69,8 @@ public class Workout {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nWorkout Details:");
-        sb.append("\nUsername: ").append(username);
         sb.append("\nDate: ").append(new SimpleDateFormat("yyyy-MM-dd").format(date));
-        sb.append("\nType: ").append(type);
+        sb.append("\nType: ").append(typeName);
         sb.append("\nDuration: ").append(duration).append(" minutes");
         sb.append("\nCalories: ").append(calories);
         if (additionalParams != null && !additionalParams.isEmpty()) {
@@ -75,7 +88,7 @@ public class Workout {
      * @return A short string representation of the workout.
      */
     public String toStringShort() {
-        return "Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + type;
+        return "Date: " + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", Type: " + typeName;
     }
 
 }

@@ -1,12 +1,11 @@
-package service;
+package repository;
 
 import java.sql.Date;
 
 /**
- * Interface for calculating workout statistics.
+ * Repository for calculating workout statistics.
  */
-public interface WorkoutStatistics {
-
+public interface WorkoutStatisticsRepository {
 
     /**
      * Calculates the total value of a specific column in the workouts table for a given user within a specified date range.
@@ -22,4 +21,6 @@ public interface WorkoutStatistics {
      * or for all time if filterByDate is false.
      */
     int getTotal(Long userId, boolean filterByDate, Date start, Date end, String columnName);
+
+
 }

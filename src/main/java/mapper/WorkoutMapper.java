@@ -1,9 +1,13 @@
 package mapper;
 
 import dto.WorkoutDTO;
+import dto.WorkoutTypeDTO;
 import model.Workout;
+import model.WorkoutType;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * Mapper interface for converting between Workout and WorkoutDTO objects.
@@ -31,4 +35,28 @@ public interface WorkoutMapper {
      * @return The converted WorkoutDTO object.
      */
     WorkoutDTO workoutToWorkoutDTO(Workout workout);
+
+    /**
+     * Converts a list of Workout objects to a list of WorkoutDTO objects.
+     *
+     * @param workouts The list of Workout objects to convert.
+     * @return The list of converted WorkoutDTO objects.
+     */
+    List<WorkoutDTO> workoutListToWorkoutDTOList(List<Workout> workouts);
+
+    /**
+     * Converts a WorkoutType object to a WorkoutTypeDTO object.
+     *
+     * @param workoutType The WorkoutType object to convert.
+     * @return The converted WorkoutTypeDTO object.
+     */
+    WorkoutTypeDTO workoutTypeToWorkoutTypeDTO(WorkoutType workoutType);
+
+    /**
+     * Converts a list of WorkoutType objects to a list of WorkoutTypeDTO objects.
+     *
+     * @param workoutTypes The list of WorkoutType objects to convert.
+     * @return The list of converted WorkoutTypeDTO objects.
+     */
+    List<WorkoutTypeDTO> workoutTypesToWorkoutTypeDTOList(List<WorkoutType> workoutTypes);
 }

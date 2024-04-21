@@ -1,8 +1,9 @@
 package service.impl;
 
 import dto.WorkoutDTO;
+import dto.WorkoutTypeDTO;
+import lombok.RequiredArgsConstructor;
 import mapper.WorkoutMapper;
-import model.Workout;
 import repository.WorkoutRepository;
 import service.WorkoutService;
 
@@ -11,96 +12,72 @@ import java.util.List;
 /**
  * Implementation of WorkoutService.
  */
+@RequiredArgsConstructor
 public class WorkoutServiceImpl implements WorkoutService {
+
     private final WorkoutRepository workoutRepository;
 
     /**
-     * Constructs a new WorkoutServiceImpl.
-     *
-     * @param workoutRepository The WorkoutRepository.
-     */
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository) {
-        this.workoutRepository = workoutRepository;
-    }
-
-
-    /**
-     * Adds a new workout.
-     *
-     * @param workoutDTO The DTO representing the new workout to add.
+     * {@inheritDoc}
      */
     @Override
     public void addWorkout(WorkoutDTO workoutDTO) {
         var workout = WorkoutMapper.INSTANCE.workoutDTOToWorkout(workoutDTO);
         workoutRepository.addWorkout(workout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<WorkoutDTO> getAllUserWorkouts(Long userId) {
+        var userWorkouts = workoutRepository.getAllUserWorkouts(userId);
+        return WorkoutMapper.INSTANCE.workoutListToWorkoutDTOList(userWorkouts);
+
 
     }
 
     /**
-     * Retrieves all workouts for a specific user.
-     *
-     * @param username The username of the user.
-     * @return A list of workouts for the specified user.
+     * {@inheritDoc}
      */
     @Override
-    public List<Workout> getAllUserWorkouts(String username) {
-        return workoutRepository.getAllUserWorkouts(username);
+    public List<WorkoutTypeDTO> getAllWorkoutTypes() {
+        var workoutTypes = workoutRepository.getAllWorkoutTypes();
+        return WorkoutMapper.INSTANCE.workoutTypesToWorkoutTypeDTOList(workoutTypes);
     }
 
     /**
-     * Retrieves all distinct workout types.
-     *
-     * @return A list of all distinct workout types.
+     * {@inheritDoc}
      */
     @Override
-    public List<String> getAllWorkoutTypes() {
-        return workoutRepository.getAllWorkoutTypes();
+    public Long addNewWorkoutType(String type) {
+        return workoutRepository.addNewWorkoutType(type);
     }
 
     /**
-     * Adds a new workout type.
-     *
-     * @param type The new workout type to add.
+     * {@inheritDoc}
      */
     @Override
-    public void addNewWorkoutTyp(String type) {
-        workoutRepository.addNewWorkoutType(type);
-    }
-
-    /**
-     * Retrieves a specific user's workout by index.
-     *
-     * @param username     The username of the user.
-     * @param elementIndex The index of the workout.
-     * @return The workout at the specified index for the specified user.
-     */
-    @Override
-    public WorkoutDTO getUserWorkoutByIndex(String username, int elementIndex) {
-        var workout = workoutRepository.getUserWorkoutByIndex(username, elementIndex);
+    public WorkoutDTO getUserWorkoutByWorkoutId(Long userId, Long workoutId) {
+        var workout = workoutRepository.getUserWorkoutByWorkoutId(userId, workoutId);
         return WorkoutMapper.INSTANCE.workoutToWorkoutDTO(workout);
     }
 
     /**
-     * Updates an existing workout.
-     *
-     * @param editedWorkoutDTO The DTO representing the edited workout.
-     * @param elementIndex     The index of the workout to update.
+     * {@inheritDoc}
      */
     @Override
-    public void editWorkout(WorkoutDTO editedWorkoutDTO, int elementIndex) {
+    public void editWorkout(WorkoutDTO editedWorkoutDTO) {
         var workout = WorkoutMapper.INSTANCE.workoutDTOToWorkout(editedWorkoutDTO);
-        workoutRepository.editWorkout(workout, elementIndex);
+        workoutRepository.editWorkout(workout);
 
     }
 
     /**
-     * Deletes a workout.
-     *
-     * @param username       The username of the user.
-     * @param indexForDelete The index of the workout to delete.
+     * {@inheritDoc}
      */
     @Override
-    public void deleteWorkoutByIndex(String username, int indexForDelete) {
-        workoutRepository.deleteWorkoutByIndex(username, indexForDelete);
+    public void deleteWorkout(Long workoutId) {
+        workoutRepository.deleteWorkout(workoutId);
     }
 }

@@ -1,70 +1,96 @@
 package repository.impl;
 
-import dto.UserDTO;
-import mapper.UserMapper;
+import containers.TestContainer;
+import liquibase.LiquibaseMigration;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Mapper;
-import repository.UserRepository;
+import util.ConnectionManager;
 import util.UserRoles;
 
-import java.util.List;
-import java.util.Optional;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class UserRepositoryImplTest {
-
-    private UserRepository userRepository;
+class UserRepositoryImplTest extends TestContainer {
+    private UserRepositoryImpl userRepository;
 
     @BeforeEach
-    void setUp() {
-        userRepository = new UserRepositoryImpl();
+    public void setUp() {
+        ConnectionManager connectionManager = new ConnectionManager(
+                container.getJdbcUrl(),
+                container.getUsername(),
+                container.getPassword()
+        );
+
+        LiquibaseMigration.runMigrations(connectionManager);
+        userRepository = new UserRepositoryImpl(connectionManager);
     }
 
     @Test
-    @DisplayName("Registering a user should add the user to the repository")
-    void registerUser_ShouldAddUserToRepository() {
-        User user = new User("testUser", "password", UserRoles.USER);
-        userRepository.registerUser(user);
+    @DisplayName("Checking retrieval of the list of all users after adding new users")
+    void getAllUsers_ShouldReturnCorrectNumberOfUsers_AfterAddingNewUsers() {
+        var usersListSizeBeforeAddingUsers = userRepository.getAllUsers().size();
+        User firstNewUser = User.builder()
+                .username("firstTestLogin")
+                .password("firstTestPassword")
+                .role(UserRoles.USER)
+                .build();
+        User secondNewUser = User.builder()
+                .username("secondTestLogin")
+                .password("secondTestPassword")
+                .role(UserRoles.USER)
+                .build();
+        userRepository.registerUser(firstNewUser);
+        userRepository.registerUser(secondNewUser);
 
-        assertTrue(userRepository.isUsernameExists(user.getUsername()));
-    }
+        var users = userRepository.getAllUsers();
+        var usersListSizeAfterAddingUsers = users.size();
+        assertThat(usersListSizeAfterAddingUsers).isEqualTo(usersListSizeBeforeAddingUsers + 2);
+        assertThat(users.stream().anyMatch(user -> user.getUsername().equals(firstNewUser.getUsername()))).isTrue();
+        assertThat(users.stream().anyMatch(user -> user.getUsername().equals(secondNewUser.getUsername()))).isTrue();
 
-
-    @Test
-    @DisplayName("Authenticating a user should return the user when credentials are correct")
-    void authenticateUser_ShouldReturnUserWhenCredentialsAreCorrect() {
-        User user = new User("testUser", "password", UserRoles.USER);
-        userRepository.registerUser(user);
-        Optional<User> authenticatedUser = userRepository.authenticateUser(user.getUsername(), user.getPassword());
-
-        assertTrue(authenticatedUser.isPresent());
-        assertEquals(user, authenticatedUser.get());
-    }
-
-    @Test
-    @DisplayName("Authenticating a user should return an empty Optional when credentials are incorrect")
-    void authenticateUser_ShouldReturnEmptyOptionalWhenCredentialsAreIncorrect() {
-        User user = new User("testUser", "password", UserRoles.USER);
-        userRepository.registerUser(user);
-        Optional<User> authenticatedUser = userRepository.authenticateUser(user.getUsername(), "wrongPassword");
-
-        assertFalse(authenticatedUser.isPresent());
     }
 
     @Test
-    @DisplayName("getAllUsers method should return all registered users")
-    void getAllUsers_ShouldReturnAllRegisteredUsers() {
-        User user1 = new User("testUser1", "password1", UserRoles.USER);
-        User user2 = new User("testUser2", "password2", UserRoles.USER);
-        userRepository.registerUser(user1);
-        userRepository.registerUser(user2);
-        List<UserDTO> allUsers = userRepository.getAllUsers();
-        assertEquals(2, allUsers.size());
-        assertEquals("testUser1", allUsers.get(1).getUsername());
-        assertEquals("testUser2", allUsers.get(0).getUsername());
+    @DisplayName("Registering a new user should create a new user record")
+    public void shouldCreateNewUserWhenRegisteringUser() {
+        User userToRegister = User.builder()
+                .username("testUsername")
+                .password("testPassword")
+                .role(UserRoles.USER)
+                .build();
+
+        userRepository.registerUser(userToRegister);
+        User savedUser = userRepository.getUserByUsername(userToRegister.getUsername()).orElse(null);
+
+        assertThat(savedUser.getId()).isNotNull();
+        assertThat(savedUser.getUsername()).isEqualTo(userToRegister.getUsername());
+        assertThat(savedUser.getPassword()).isEqualTo(userToRegister.getPassword());
+        assertThat(savedUser.getRole()).isEqualTo(userToRegister.getRole());
     }
+
+    @Test
+    @DisplayName("Getting user by username should return the correct user")
+    void shouldReturnCorrectUserWhenGettingUserByUsername() {
+        User user = userRepository.getUserByUsername("testUsername").orElse(null);
+        assertThat(user.getUsername()).isEqualTo("testUsername");
+        assertThat(user.getPassword()).isEqualTo("testPassword");
+        assertThat(user.getRole()).isEqualTo(UserRoles.USER);
+    }
+
+    @Test
+    @DisplayName("Should check if username exists in the user repository")
+    void shouldCheckIfUsernameExists() {
+        User userToCheck = User.builder()
+                .username("bob")
+                .password("testPassword")
+                .role(UserRoles.USER)
+                .build();
+
+        userRepository.registerUser(userToCheck);
+        boolean isUsernameExists = userRepository.isUsernameExists("bob");
+
+        assertThat(isUsernameExists).isTrue();
+    }
+
 }

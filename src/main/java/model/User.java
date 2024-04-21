@@ -1,10 +1,7 @@
 package model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import util.UserRoles;
 
 /**
@@ -14,7 +11,14 @@ import util.UserRoles;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
+
+    /**
+     * The id of the user.
+     */
+    private Long id;
+
     /**
      * The username of the user.
      */
