@@ -11,7 +11,6 @@ import util.UserRoles;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User {
 
     /**

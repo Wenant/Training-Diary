@@ -52,12 +52,8 @@ class WorkoutRepositoryImplTest extends TestContainer {
     @Test
     @DisplayName("Adding a new workout should create a new workout record")
     void shouldCreateNewWorkoutWhenAddingWorkout() {
+        User user = new User(null,"testUsername","testPassword",UserRoles.USER);
 
-        var user = User.builder()
-                .username("testUsername")
-                .password("testPassword")
-                .role(UserRoles.USER)
-                .build();
         userRepository.registerUser(user);
         workoutUser = userRepository.getUserByUsername(user.getUsername()).orElse(null);
         var userId = workoutUser.getId();
